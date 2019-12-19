@@ -5,6 +5,7 @@ import com.roxiemobile.androidcommons.logging.Logger.Contract;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public final class ChainedLogger implements Logger.Contract
 {
@@ -25,6 +26,13 @@ public final class ChainedLogger implements Logger.Contract
     }
 
     @Override
+    public void v(String tag, Callable<String> task) {
+        for (Contract logger : mLoggers) {
+            logger.v(tag, task);
+        }
+    }
+
+    @Override
     public void d(String tag, String msg) {
         for (Contract logger : mLoggers) {
             logger.d(tag, msg);
@@ -32,9 +40,23 @@ public final class ChainedLogger implements Logger.Contract
     }
 
     @Override
+    public void d(String tag, Callable<String> task) {
+        for (Contract logger : mLoggers) {
+            logger.d(tag, task);
+        }
+    }
+
+    @Override
     public void i(String tag, String msg) {
         for (Contract logger : mLoggers) {
             logger.i(tag, msg);
+        }
+    }
+
+    @Override
+    public void i(String tag, Callable<String> task) {
+        for (Contract logger : mLoggers) {
+            logger.i(tag, task);
         }
     }
 
@@ -60,6 +82,20 @@ public final class ChainedLogger implements Logger.Contract
     }
 
     @Override
+    public void w(String tag, Callable<String> task) {
+        for (Contract logger : mLoggers) {
+            logger.w(tag, task);
+        }
+    }
+
+    @Override
+    public void w(String tag, Callable<String> task, Throwable err) {
+        for (Contract logger : mLoggers) {
+            logger.w(tag, task, err);
+        }
+    }
+
+    @Override
     public void e(String tag, String msg) {
         for (Contract logger : mLoggers) {
             logger.e(tag, msg);
@@ -77,6 +113,20 @@ public final class ChainedLogger implements Logger.Contract
     public void e(String tag, Throwable err) {
         for (Contract logger : mLoggers) {
             logger.e(tag, err);
+        }
+    }
+
+    @Override
+    public void e(String tag, Callable<String> task) {
+        for (Contract logger : mLoggers) {
+            logger.e(tag, task);
+        }
+    }
+
+    @Override
+    public void e(String tag, Callable<String> task, Throwable err) {
+        for (Contract logger : mLoggers) {
+            logger.e(tag, task, err);
         }
     }
 

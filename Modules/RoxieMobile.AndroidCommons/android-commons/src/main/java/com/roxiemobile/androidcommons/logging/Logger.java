@@ -1,5 +1,7 @@
 package com.roxiemobile.androidcommons.logging;
 
+import java.util.concurrent.Callable;
+
 public final class Logger
 {
 // MARK: - Construction
@@ -54,6 +56,14 @@ public final class Logger
         }
     }
 
+    public static void v(String tag, Callable<String> task) {
+        Logger.Contract logger = shared().logger();
+
+        if (logger != null && isLoggable(LogLevel.Verbose)) {
+            logger.v(tag, task);
+        }
+    }
+
     public static void d(String tag, String msg) {
         Logger.Contract logger = shared().logger();
 
@@ -62,11 +72,27 @@ public final class Logger
         }
     }
 
+    public static void d(String tag, Callable<String> task) {
+        Logger.Contract logger = shared().logger();
+
+        if (logger != null && isLoggable(LogLevel.Debug)) {
+            logger.d(tag, task);
+        }
+    }
+
     public static void i(String tag, String msg) {
         Logger.Contract logger = shared().logger();
 
         if (logger != null && isLoggable(LogLevel.Info)) {
             logger.i(tag, msg);
+        }
+    }
+
+    public static void i(String tag, Callable<String> task) {
+        Logger.Contract logger = shared().logger();
+
+        if (logger != null && isLoggable(LogLevel.Info)) {
+            logger.i(tag, task);
         }
     }
 
@@ -94,6 +120,22 @@ public final class Logger
         }
     }
 
+    public static void w(String tag, Callable<String> task) {
+        Logger.Contract logger = shared().logger();
+
+        if (logger != null && isLoggable(LogLevel.Warning)) {
+            logger.w(tag, task);
+        }
+    }
+
+    public static void w(String tag, Callable<String> task, Throwable err) {
+        Logger.Contract logger = shared().logger();
+
+        if (logger != null && isLoggable(LogLevel.Warning)) {
+            logger.w(tag, task, err);
+        }
+    }
+
     public static void e(String tag, String msg) {
         Logger.Contract logger = shared().logger();
 
@@ -118,6 +160,22 @@ public final class Logger
         }
     }
 
+    public static void e(String tag, Callable<String> task) {
+        Logger.Contract logger = shared().logger();
+
+        if (logger != null && isLoggable(LogLevel.Error)) {
+            logger.e(tag, task);
+        }
+    }
+
+    public static void e(String tag, Callable<String> task, Throwable err) {
+        Logger.Contract logger = shared().logger();
+
+        if (logger != null && isLoggable(LogLevel.Error)) {
+            logger.e(tag, task, err);
+        }
+    }
+
 // MARK: - Methods
 
     public static boolean isLoggable(LogLevel level) {
@@ -126,7 +184,11 @@ public final class Logger
 
 // MARK: - Inner Types
 
-    public interface Contract
+    public interface Contract extends TaskExtendedContract, CommonContract
+    {
+    }
+
+    public interface CommonContract
     {
         void v(String tag, String msg);
         void d(String tag, String msg);
@@ -137,6 +199,17 @@ public final class Logger
         void e(String tag, String msg);
         void e(String tag, String msg, Throwable err);
         void e(String tag, Throwable err);
+    }
+
+    public interface TaskExtendedContract
+    {
+        void v(String tag, Callable<String> task);
+        void d(String tag, Callable<String> task);
+        void i(String tag, Callable<String> task);
+        void w(String tag, Callable<String> task);
+        void w(String tag, Callable<String> task, Throwable err);
+        void e(String tag, Callable<String> task);
+        void e(String tag, Callable<String> task, Throwable err);
     }
 
     public enum LogLevel
